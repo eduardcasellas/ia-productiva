@@ -1,1 +1,0 @@
-Idea -> Prompt -> Guió -> Publicació

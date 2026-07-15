@@ -1,5 +1,9 @@
-# Plantilla
+# LinkedIn
+
 Hook
+
 Problema
+
 Solució
+
 CTA

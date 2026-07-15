@@ -1,3 +1,3 @@
-# Sessió
+# CORE-02
 
-Core-01 creat.
+Afegits GitHub Actions, tasques VS Code, scripts i plantilles.
