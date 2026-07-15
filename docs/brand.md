@@ -2,19 +2,19 @@
 
 ## Missió
 
-Ajudar professionals, emprenedors i persones curioses a utilitzar la intel·ligència artificial de manera pràctica per estalviar temps, automatitzar tasques i treballar millor.
+Ajudar professionals, autònoms i petites empreses a utilitzar la intel·ligència artificial de forma pràctica per estalviar temps i treballar millor.
 
 ## Visió
 
-Ser la referència en IA pràctica en català i castellà.
+Ser la referència en IA aplicada en català i castellà.
 
 ## Valors
 
-- Utilitat
-- Simplicitat
-- Honestedat
-- Productivitat
-- Aprenentatge continu
+- Utilitat abans que novetat.
+- Simplicitat.
+- Rigor.
+- Productivitat.
+- Aprenentatge continu.
 
 ## Públic objectiu
 
@@ -22,46 +22,16 @@ Ser la referència en IA pràctica en català i castellà.
 - Autònoms
 - Petites empreses
 - Estudiants
-- Persones que treballen amb ordinador
+- Persones que treballen davant d'un ordinador.
+
+## Promesa
+
+Cada contingut ha de solucionar un problema real o ensenyar una manera més eficient de treballar.
 
 ## To
 
-Clar, pràctic, rigorós i orientat a resultats.
-
-## Posicionament
-
-No expliquem què és la IA.
-Expliquem com utilitzar-la per resoldre problemes reals.# IA Productiva
-
-## Missió
-
-Ajudar professionals, emprenedors i persones curioses a utilitzar la intel·ligència artificial de manera pràctica per estalviar temps, automatitzar tasques i treballar millor.
-
-## Visió
-
-Ser la referència en IA pràctica en català i castellà.
-
-## Valors
-
-- Utilitat
-- Simplicitat
-- Honestedat
-- Productivitat
-- Aprenentatge continu
-
-## Públic objectiu
-
-- Professionals
-- Autònoms
-- Petites empreses
-- Estudiants
-- Persones que treballen amb ordinador
-
-## To
-
-Clar, pràctic, rigorós i orientat a resultats.
-
-## Posicionament
-
-No expliquem què és la IA.
-Expliquem com utilitzar-la per resoldre problemes reals.
+- Clar
+- Professional
+- Proper
+- Sense clickbait
+- Basat en exemples pràctics
