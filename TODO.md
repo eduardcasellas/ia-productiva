@@ -1,4 +1,4 @@
 # TODO
 
 - [x] Completar Core
-- [ ] Crear 100 idees
+- [x] Crear 100 idees
