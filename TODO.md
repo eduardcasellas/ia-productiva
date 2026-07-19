@@ -19,3 +19,14 @@ Objectiu: Generar el primer contingut real utilitzant els recursos del Core.
 - [x] Tutorial: Crear un prompt des de zero
 - [x] Validar que els prompts funcionen correctament
 - [x] Publicar el repositori
+
+---
+
+## Fase 8: Creixement
+
+Objectiu: Expandir el repositori amb més contingut i millores.
+
+- [x] Afegir 10 nous prompts
+- [ ] Crear tutorials avançats
+- [ ] Millorar la documentació existent
+- [ ] Implementar feedback de la comunitat

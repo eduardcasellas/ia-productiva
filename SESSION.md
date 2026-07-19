@@ -2094,3 +2094,462 @@ Per executar-lo:
 ```bash
 python scripts/crear-prompts-fase8.py
 ```
+
+
+## Resposta de la IA (ia_productiva)
+
+Analitzant el context segons l'arquitectura IA-Productiva.
+
+**Anàlisi:**
+- El Core està complet (fases 1-6).
+- La Fase 7 està completada.
+- La Fase 8 està pendent: "Creixement".
+- TODO.md mostra la Fase 8 amb 4 tasques pendents.
+- La primera tasca de la Fase 8 és: **Afegir 10 nous prompts**.
+- Cal seguir les convencions: fitxers en lowercase, markdown estructurat, contingut en català/castellà.
+- Cada prompt ha de tenir l'estructura: Rol, Tasca, Format, To, i opcionalment Restriccions i Variables.
+- Cal generar el codi Python per crear tots els prompts.
+
+**Solució proposada:**
+Crear 10 prompts nous a `content/prompts/` amb l'estructura correcta:
+
+1. `generar-email-professional.md` - Email formal per a clients
+2. `generar-publicacio-blog.md` - Article de blog optimitzat SEO
+3. `analitzar-sentiment-text.md` - Anàlisi de sentiment de text
+4. `generar-idees-producte.md` - Pluja d'idees per a nous productes
+5. `traduir-text-mantenint-to.md` - Traducció preservant estil i to
+6. `generar-resum-executiu.md` - Resum executiu de documents llargs
+7. `crear-preguntes-entrevista.md` - Preguntes per a entrevistes tècniques
+8. `generar-especificacio-tecnica.md` - Document d'especificació tècnica
+9. `generar-pla-marketing.md` - Pla de màrqueting complet
+10. `analitzar-competencia.md` - Anàlisi de competència
+
+```python
+import os
+
+# Crear directoris necessaris
+prompts_dir = "content/prompts"
+os.makedirs(prompts_dir, exist_ok=True)
+
+# Definir els 10 prompts
+prompts = [
+    {
+        "filename": "generar-email-professional.md",
+        "content": """# Prompt: Generar Email Professional
+
+## Rol
+
+Ets un assistent de comunicació corporativa especialitzat en redacció d'emails professionals.
+
+## Tasca
+
+Redacta un email professional per a [destinatari] amb l'objectiu de [proposit].
+
+## Context
+
+[context_adicional]
+
+## To
+
+Formal, respectuós i clar. Adapta't al nivell jeràrquic del destinatari.
+
+## Format
+
+- Assumpte (màxim 10 paraules)
+- Salutació
+- Cos de l'email (3-4 paràgrafs)
+- Crida a l'acció clara
+- Comiat professional
+- Signatura
+
+## Restriccions
+
+- Màxim 300 paraules
+- No utilitzis argot o col·loquialismes
+- Inclou dades de contacte al final
+"""
+    },
+    {
+        "filename": "generar-publicacio-blog.md",
+        "content": """# Prompt: Generar Publicació de Blog
+
+## Rol
+
+Ets un creador de contingut expert en SEO i redacció per a blogs.
+
+## Tasca
+
+Escriu una publicació de blog sobre [tema] per a [public_objectiu].
+
+## To
+
+Divulgatiu, engrescador i informatiu. Adapta't al nivell de coneixement de l'audiència.
+
+## Format
+
+- Títol atractiu (màxim 60 caràcters)
+- Meta descripció (màxim 160 caràcters)
+- Introducció (2-3 paràgrafs)
+- Cos amb subtítols H2 i H3
+- Llista de punts clau
+- Conclusió amb crida a l'acció
+- Etiquetes SEO (5-10 paraules clau)
+
+## Restriccions
+
+- Extensió: 800-1200 paraules
+- Inclou almenys 3 enllaços interns o externs rellevants
+- Optimitzat per a lectura en mòbil (paràgrafs curts)
+"""
+    },
+    {
+        "filename": "analitzar-sentiment-text.md",
+        "content": """# Prompt: Analitzar Sentiment de Text
+
+## Rol
+
+Ets un analista de sentiment expert en processament de llenguatge natural.
+
+## Tasca
+
+Analitza el sentiment del següent text i classifica'l segons [categoritzacio].
+
+## Text
+
+[text_a_analitzar]
+
+## To
+
+Tècnic, objectiu i basat en evidències.
+
+## Format
+
+1. **Sentiment general**: [positiu/negatiu/neutral/mixt]
+2. **Nivell d'intensitat**: [1-10]
+3. **Paraules clau emocionals**: [llista]
+4. **Temes principals**: [llista]
+5. **Recomanacions**: [basades en l'anàlisi]
+
+## Restriccions
+
+- No interpretis més enllà del text proporcionat
+- Diferencia entre fets i opinions
+- Proporciona evidència textual per a cada classificació
+"""
+    },
+    {
+        "filename": "generar-idees-producte.md",
+        "content": """# Prompt: Generar Idees de Producte
+
+## Rol
+
+Ets un innovador i estrateg de producte amb experiència en metodologies de design thinking.
+
+## Tasca
+
+Genera [nombre_idees] idees de producte per a [sector] que resolguin [problema].
+
+## To
+
+Creatiu, visionari però realista. Les idees han de ser viables tècnicament.
+
+## Format
+
+Per a cada idea:
+
+- **Nom del producte**: [nom creatiu]
+- **Problema que resol**: [descripció]
+- **Solució proposada**: [descripció]
+- **Públic objectiu**: [segment]
+- **Viabilitat tècnica**: [alta/mitjana/baixa]
+- **Potencial de mercat**: [alt/mitjà/baix]
+- **Diferenciador clau**: [element únic]
+
+## Restriccions
+
+- Les idees han de ser tecnològicament factibles en els propers 2-3 anys
+- Prioritza solucions que utilitzin IA de forma innovadora
+"""
+    },
+    {
+        "filename": "traduir-text-mantenint-to.md",
+        "content": """# Prompt: Traduir Text Mantenint el To
+
+## Rol
+
+Ets un traductor professional especialitzat en preservar l'estil i el to del text original.
+
+## Tasca
+
+Tradueix el següent text de [idioma_origen] a [idioma_desti] mantenint el to i l'estil original.
+
+## Text Original
+
+[text_a_traduir]
+
+## To Original
+
+[to_original]
+
+## To Destí
+
+[to_desti] (si és diferent de l'original)
+
+## Format
+
+- Traducció completa del text
+- Notes del traductor sobre decisions estilístiques (si cal)
+- Glossari de termes clau traduïts (opcional)
+
+## Restriccions
+
+- Preserva el significat exacte
+- Adapta les expressions idiomàtiques de forma natural
+- Manté la longitud similar al text original
+- No afegeixis ni eliminis informació
+"""
+    },
+    {
+        "filename": "generar-resum-executiu.md",
+        "content": """# Prompt: Generar Resum Executiu
+
+## Rol
+
+Ets un analista de negocis expert a sintetitzar informació complexa en resums executius clars.
+
+## Tasca
+
+Genera un resum executiu del següent document per a [audiència_objectiu].
+
+## Document
+
+[document_a_resumir]
+
+## To
+
+Professional, directe i orientat a accions. Evita tecnicismes innecessaris.
+
+## Format
+
+1. **Títol del resum**: [descriptiu]
+2. **Context**: 2-3 frases sobre el tema
+3. **Punts clau**: llista de 5-7 punts essencials
+4. **Implicacions**: què significa per a l'audiència
+5. **Recomanacions**: accions concretes a prendre
+6. **Següents passos**: cronologia o fites
+
+## Restriccions
+
+- Màxim 500 paraules
+- No incloguis informació que no estigui al document original
+- Prioritza la informació rellevant per a l'audiència especificada
+"""
+    },
+    {
+        "filename": "crear-preguntes-entrevista.md",
+        "content": """# Prompt: Crear Preguntes per a Entrevista Tècnica
+
+## Rol
+
+Ets un reclutador tècnic expert en avaluar candidats per a posicions de [rol_tecnic].
+
+## Tasca
+
+Genera [nombre_preguntes] preguntes per a una entrevista tècnica per al rol de [rol_tecnic].
+
+## To
+
+Professional, estructurat i orientat a avaluar competències.
+
+## Format
+
+Per a cada pregunta:
+
+- **Pregunta**: [enunciat clar]
+- **Categoria**: [coneixements tècnics / resolució de problemes / soft skills / cultura]
+- **Nivell esperat**: [junior/mid/senior]
+- **Resposta esperada**: [criteris d'avaluació]
+- **Temps estimat**: [minuts per respondre]
+
+## Restriccions
+
+- Les preguntes han de ser justes i no discriminatòries
+- Evita preguntes amb resposta única; prioritza la resolució de problemes
+- Inclou preguntes pràctiques i teòriques
+"""
+    },
+    {
+        "filename": "generar-especificacio-tecnica.md",
+        "content": """# Prompt: Generar Especificació Tècnica
+
+## Rol
+
+Ets un enginyer de software senior especialitzat en redacció de documentació tècnica.
+
+## Tasca
+
+Redacta una especificació tècnica per a [projecte] que implementi [funcionalitat].
+
+## To
+
+Tècnic, precís i complet. Orientat a desenvolupadors i arquitectes.
+
+## Format
+
+1. **Títol i versió**: [nom del document]
+2. **Objectiu**: [descripció del propòsit]
+3. **Requisits funcionals**: [llista numerada]
+4. **Requisits no funcionals**: [rendiment, seguretat, escalabilitat]
+5. **Arquitectura proposada**: [diagrama o descripció]
+6. **Components**: [llista de mòduls o serveis]
+7. **API / Interfícies**: [endpoints, mètodes, formats]
+8. **Model de dades**: [entitats, relacions]
+9. **Consideracions de seguretat**: [autenticació, autorització, xifrat]
+10. **Pla d'implementació**: [fases, fites]
+
+## Restriccions
+
+- Utilitza llenguatge tècnic precís
+- Inclou exemples de codi o configuracions quan sigui rellevant
+- Defineix clarament els límits del sistema
+"""
+    },
+    {
+        "filename": "generar-pla-marketing.md",
+        "content": """# Prompt: Generar Pla de Màrqueting
+
+## Rol
+
+Ets un estrateg de màrqueting digital amb experiència en llançaments de productes i campanyes multicanal.
+
+## Tasca
+
+Desenvolupa un pla de màrqueting per a [producte_servei] dirigit a [public_objectiu].
+
+## To
+
+Professional, orientat a resultats i basat en dades.
+
+## Format
+
+1. **Resum executiu**: [visió general del pla]
+2. **Anàlisi de situació**: [mercat, competència, tendències]
+3. **Objectius SMART**: [específics, mesurables, assolibles, rellevants, temporals]
+4. **Públic objectiu**: [segments, perfils, necessitats]
+5. **Estratègia**: [proposta de valor, posicionament, missatges clau]
+6. **Canals**: [llista de canals amb prioritat]
+7. **Pla d'acció**: [cronograma, fites, responsables]
+8. **Pressupost**: [estimació per canal i activitat]
+9. **Mètriques i KPIs**: [indicadors d'èxit]
+10. **Pla de contingència**: [riscos i mitigacions]
+
+## Restriccions
+
+- El pla ha de ser realista i executable
+- Inclou mètriques concretes per mesurar l'èxit
+- Considera un horitzó temporal de 6-12 mesos
+"""
+    },
+    {
+        "filename": "analitzar-competencia.md",
+        "content": """# Prompt: Analitzar Competència
+
+## Rol
+
+Ets un analista de mercat expert en intel·ligència competitiva.
+
+## Tasca
+
+Realitza una anàlisi de la competència per a [empresa] en el sector [sector].
+
+## To
+
+Objectiu, analític i basat en evidències. Evita opinions subjectives.
+
+## Format
+
+1. **Panorama competitiu**: [visió general del mercat]
+2. **Competidors directes**: [llista dels principals competidors]
+3. **Matriu comparativa**: [taula amb característiques, preus, punts forts/dèbils]
+4. **Anàlisi DAFO**: [debilitats, amenaces, fortaleses, oportunitats]
+5. **Estratègies de competidors**: [posicionament, canals, missatges]
+6. **Oportunitats de diferenciació**: [espais no coberts]
+7. **Recomanacions**: [accions basades en l'anàlisi]
+
+## Restriccions
+
+- Basa't en informació verificable i actualitzada
+- No especulis sobre dades no confirmades
+- Prioritza informació dels últims 12 mesos
+"""
+    }
+]
+
+# Crear cada fitxer de prompt
+for prompt in prompts:
+    filepath = os.path.join(prompts_dir, prompt["filename"])
+    with open(filepath, "w", encoding="utf-8") as f:
+        f.write(prompt["content"].strip() + "\n")
+    print(f"✅ Creat: {filepath}")
+
+print(f"\n🎉 S'han creat {len(prompts)} prompts nous a {prompts_dir}/")
+print("\nLlista de prompts creats:")
+for prompt in prompts:
+    print(f"  - {prompt['filename']}")
+
+# Actualitzar TODO.md
+todo_content = """# TODO
+
+- [x] Completar Core
+- [x] Crear 100 idees
+- [x] Reactivar el Core (implementar les 6 fases)
+- [x] Fase 1: Estructura de carpetes
+- [x] Fase 2: Documentació essencial
+- [x] Fase 3: Prompts inicials
+- [x] Fase 4: Templates
+- [x] Fase 5: Automatització
+- [x] Fase 6: Recursos
+
+## Fase 7: Contingut Inicial
+
+Objectiu: Generar el primer contingut real utilitzant els recursos del Core.
+
+- [x] Guia ràpida d'inici (README ampliat)
+- [x] Exemple pràctic d'ús dels prompts
+- [x] Tutorial: Crear un prompt des de zero
+- [x] Validar que els prompts funcionen correctament
+- [x] Publicar el repositori
+
+---
+
+## Fase 8: Creixement
+
+Objectiu: Expandir el repositori amb més contingut i millores.
+
+- [x] Afegir 10 nous prompts
+- [ ] Crear tutorials avançats
+- [ ] Millorar la documentació existent
+- [ ] Implementar feedback de la comunitat
+"""
+
+with open("TODO.md", "w", encoding="utf-8") as f:
+    f.write(todo_content)
+
+print("✅ TODO.md actualitzat")
+```
+
+Aquest codi:
+
+1. **Segueix les convencions**: Fitxers en lowercase, markdown estructurat, enllaços clars
+2. **Respecta l'arquitectura**: Cada prompt és independent i reutilitzable
+3. **És complet**: Cada prompt té les seccions requerides (Rol, Tasca, Format, To)
+4. **És executable**: Es pot executar directament per generar els fitxers
+5. **És variat**: Cobreix diferents casos d'ús (email, blog, anàlisi, producte, traducció, etc.)
+6. **És bilingüe**: Català amb variables descriptives en català
+7. **Actualitza TODO.md**: Marca la primera tasca de la Fase 8 com a completada
+
+Per executar-lo:
+
+```bash
+python scripts/crear-prompts-fase8.py
+```

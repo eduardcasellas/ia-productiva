@@ -8,50 +8,131 @@ from .prompt import build_prompt
 from .ia_adapter import IAAdapter
 from .task import process_response, marcar_tasca_completada
 
-def extreure_i_executar_codi(resposta):
+# Mapatge de llenguatges a extensions i carpeta de destí (corregit)
+LANGUAGE_MAP = {
+    'python': ('py', 'scripts'),
+    'html': ('html', 'content/html'),
+    'css': ('css', 'content/css'),
+    'javascript': ('js', 'content/js'),
+    'markdown': ('md', 'content/markdown'),
+    'json': ('json', 'content/json'),
+    'yaml': ('yml', 'content/yaml'),
+    'sql': ('sql', 'content/sql'),
+    'bash': ('sh', 'scripts'),
+    'shell': ('sh', 'scripts'),
+}
+
+def extreure_nom_fitxer(contingut, prefix=None):
     """
-    Extreu codi Python de la resposta i l'executa.
-    Retorna True si s'ha executat codi, False si no.
+    Extreu un nom descriptiu del contingut.
+    - Busca la primera línia que comenci per #, ##, ###, o <title>...
+    - Si no, retorna 'document' o el prefix.
     """
-    # Buscar blocs de codi Python
-    blocs = re.findall(r'```python\n(.*?)\n```', resposta, re.DOTALL)
-    if not blocs:
-        return False
+    lines = contingut.split('\n')
+    for line in lines[:10]:
+        # Per Markdown: # Títol, ## Títol, etc.
+        match_md = re.match(r'^#+\s+(.+)$', line.strip())
+        if match_md:
+            nom = match_md.group(1).strip()
+            # Netejar el nom: treure caràcters no vàlids
+            nom = re.sub(r'[^a-zA-Z0-9àèìòóúïü·\-_\s]', '', nom)
+            nom = nom.replace(' ', '_').lower()
+            return nom[:50]  # limitar longitud
+        
+        # Per HTML: <title>...</title>
+        match_title = re.search(r'<title>(.+?)</title>', line, re.IGNORECASE)
+        if match_title:
+            nom = match_title.group(1).strip()
+            nom = re.sub(r'[^a-zA-Z0-9àèìòóúïü·\-_\s]', '', nom)
+            nom = nom.replace(' ', '_').lower()
+            return nom[:50]
+    
+    # Si no es troba cap títol, usar el prefix o 'document'
+    if prefix:
+        return prefix.lower().replace(' ', '_')
+    return 'document'
 
-    print(f"\n🔧 S'han trobat {len(blocs)} blocs de codi Python. Executant...")
-    for i, codi in enumerate(blocs, 1):
-        print(f"\n📝 Executant bloc {i}...")
-        try:
-            # Crear fitxer temporal
-            with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
-                f.write(codi)
-                f.flush()
-                temp_path = f.name
-
-            # Executar el codi
-            resultat = subprocess.run(
-                ['python3', temp_path],
-                capture_output=True,
-                text=True,
-                cwd=Path.cwd()
-            )
-
-            # Mostrar sortida
-            if resultat.stdout:
-                print(resultat.stdout)
-            if resultat.stderr:
-                print("⚠️ Errors:")
-                print(resultat.stderr)
-
-            # Netejar fitxer temporal
-            Path(temp_path).unlink()
-
-        except Exception as e:
-            print(f"❌ Error executant el bloc {i}: {e}")
-            return False
-
-    print("✅ Codi executat correctament.")
+def guardar_fitxer(contingut, extensio, carpeta_base, nom_base=None):
+    """Guarda el contingut en un fitxer amb l'extensió i carpeta adequades."""
+    carpeta = Path.cwd() / carpeta_base
+    carpeta.mkdir(parents=True, exist_ok=True)
+    
+    # Generar un nom de fitxer si no es proporciona
+    if nom_base is None:
+        nom_base = extreure_nom_fitxer(contingut)
+    
+    # Netejar el nom final
+    nom_net = re.sub(r'[^a-zA-Z0-9àèìòóúïü·\-_]', '', nom_base)
+    fitxer = carpeta / f"{nom_net}.{extensio}"
+    
+    # Si el fitxer ja existeix, afegir un número
+    counter = 1
+    while fitxer.exists():
+        fitxer = carpeta / f"{nom_net}_{counter}.{extensio}"
+        counter += 1
+    
+    with open(fitxer, 'w', encoding='utf-8') as f:
+        f.write(contingut)
+    print(f"✅ Creat: {fitxer}")
     return True
+
+def extreure_i_guardar_codi(resposta):
+    """
+    Extreu blocs de codi de la resposta i els guarda com a fitxers.
+    També detecta HTML directe si no hi ha blocs.
+    """
+    # 1. Buscar blocs de codi: ```llenguatge \n ... \n ```
+    patron = r'```(\w+)\n(.*?)\n```'
+    blocs = re.findall(patron, resposta, re.DOTALL)
+    
+    fitxers_creats = 0
+    
+    if blocs:
+        print(f"\n🔧 S'han trobat {len(blocs)} blocs de codi. Processant...")
+        for i, (llenguatge, contingut) in enumerate(blocs, 1):
+            llenguatge = llenguatge.lower().strip()
+            print(f"\n📝 Processant bloc {i} (llenguatge: {llenguatge})...")
+            
+            # Intentar extreure un nom del contingut
+            nom = extreure_nom_fitxer(contingut, prefix=f"bloc_{i}")
+            
+            if llenguatge not in LANGUAGE_MAP:
+                print(f"⚠️ Llenguatge '{llenguatge}' no suportat. Es guardarà com a text.")
+                extensio = 'txt'
+                carpeta = 'content/raw'
+            else:
+                extensio, carpeta = LANGUAGE_MAP[llenguatge]
+            
+            try:
+                guardar_fitxer(contingut, extensio, carpeta, nom)
+                fitxers_creats += 1
+            except Exception as e:
+                print(f"❌ Error guardant el bloc {i}: {e}")
+        
+        if fitxers_creats > 0:
+            print(f"✅ S'han creat {fitxers_creats} fitxers.")
+            return True
+        else:
+            print("❌ No s'ha creat cap fitxer.")
+            return False
+    
+    # 2. Si no hi ha blocs, buscar HTML directe
+    html_match = re.search(r'(<!DOCTYPE html>|<html).*?</html>', resposta, re.DOTALL | re.IGNORECASE)
+    if html_match:
+        contingut_html = html_match.group(0)
+        print("\n🔧 S'ha detectat HTML directe. Guardant...")
+        nom = extreure_nom_fitxer(contingut_html, prefix="pagina")
+        try:
+            guardar_fitxer(contingut_html, 'html', 'content/html', nom)
+            print("✅ HTML guardat.")
+            return True
+        except Exception as e:
+            print(f"❌ Error guardant HTML directe: {e}")
+            return False
+    
+    # 3. Si no hi ha res, retornar False
+    print("ℹ️ No s'ha trobat cap bloc de codi ni HTML directe a la resposta.")
+    return False
 
 def main():
     parser = argparse.ArgumentParser()
@@ -66,13 +147,11 @@ def main():
         task = detect_next_task(project_root)
         prompt = build_prompt(context, task)
 
-        # Mostrar el prompt
         print("\n📋 PROMPT GENERAT:")
         print("=" * 60)
         print(prompt)
         print("=" * 60)
 
-        # Determinar si s'ha d'executar
         executar = args.auto
         if not args.auto:
             resposta = input("\n❓ Vols executar aquesta tasca? (s/n): ").strip().lower()
@@ -82,7 +161,6 @@ def main():
                 print("⏹️ Execució cancel·lada.")
                 return
 
-        # Si s'ha d'executar, enviar a la IA
         if executar:
             adapter = IAAdapter(model=args.model)
             response = adapter.query(prompt, context)
@@ -91,14 +169,11 @@ def main():
                 print(response)
                 process_response(project_root, response)
 
-                # Executar codi si n'hi ha
-                if extreure_i_executar_codi(response):
-                    print("✅ Tasca executada automàticament.")
+                if extreure_i_guardar_codi(response):
+                    marcar_tasca_completada(project_root, task)
+                    print("✅ Tasca marcada com a completada a TODO.md")
                 else:
-                    print("ℹ️ No s'ha trobat codi executable. Revisa la resposta manualment.")
-
-                marcar_tasca_completada(project_root, task)
-                print("✅ Tasca marcada com a completada a TODO.md")
+                    print("⚠️ La tasca NO s'ha marcat com a completada perquè no s'ha generat cap fitxer.")
             else:
                 print("❌ No s'ha rebut resposta de la IA.")
         else:
